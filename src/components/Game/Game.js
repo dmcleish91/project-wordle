@@ -17,6 +17,10 @@ function Game() {
   const results = [];
   let status = undefined;
 
+  function handleSubmitGuess(guess) {
+    setGuesses([...guesses, { id: crypto.randomUUID(), label: guess }])
+  }
+
   range(guesses.length).map((_, i) => {
     const element = guesses[i];
     return results.push(checkGuess(element.label, answer));
@@ -26,18 +30,20 @@ function Game() {
     return result.every((item) => item.status === 'correct');
   });
 
-  if (gameOver) {
-    status = 'win';
-  }
-
   if (guesses.length === 6) {
     status = 'lose';
   }
 
+  if (gameOver) {
+    status = 'win';
+  }
+
+
+
   return (
     <>
       <GuessResults results={results} answer={answer} />
-      <GuessInput guesses={guesses} setGuesses={setGuesses} gameOver={gameOver !== undefined} />
+      <GuessInput guesses={guesses} handleSubmitGuess={handleSubmitGuess} gameOver={gameOver !== undefined} />
       <GameOverMessage status={status} answer={answer} numOfGuesses={guesses.length} />
     </>
   );
